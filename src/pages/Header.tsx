@@ -1,13 +1,9 @@
 import Nav from "../components/Nav"
 import logo from '../assets/logo2.jpg'
 import { FaUser } from "react-icons/fa";
-import {  useState } from "react";
-import Login from "./auth/Login";
-import SignUp from "./auth/SignUp";
 
-const Header = () => {
-  const [showLogin, setShowLogin] = useState(false)
-  const [showSignUp, setShowSignUp] = useState(false)
+const Header = ({showLogin, setShowLogin, showSignUp, setShowSignUp}: {showLogin: boolean, setShowLogin: React.Dispatch<React.SetStateAction<boolean>>, showSignUp: boolean, setShowSignUp: React.Dispatch<React.SetStateAction<boolean>>}) => {
+
  
   return (
     <div className="sticky top-0 ">
@@ -16,18 +12,13 @@ const Header = () => {
                     <img src={logo} alt="Logo" className="h-16 w-16 mr-2 rounded-full" />
                   <h1 className="text-xl font-bold">My Blog</h1>
               </div>
-                <div className="flex gap-10 space-x-4">
+                <div className="flex items-center gap-10 space-x-4">
                     <a href="/" className="text-white hover:text-gray-300">Home</a>
                     <a href="/about" className="text-white hover:text-gray-300">About</a>
           <a href="/contact" className="text-white hover:text-gray-300">Contact</a>
           
           < FaUser onClick={() => setShowLogin(!showLogin)} className="duration-300 cursor-pointer hover:text-gray-500"/>
-          {showLogin && (
-            <Login setShowLogin={setShowLogin} showLogin={showLogin}  />
-          )}
-          {showSignUp && (
-            <SignUp setShowSignUp={setShowSignUp} showSignUp={showSignUp} />
-          )}
+          <button type="button" onClick={() => setShowSignUp(!showSignUp)}>SignUp</button>
                 </div>
       </Nav>
     </div>

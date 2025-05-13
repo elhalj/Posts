@@ -65,6 +65,7 @@ const Input = ({
             value={typeof currentValue === 'string' ? currentValue : ''}
             placeholder={field.placeholder}
             onChange={handleChange}
+            autoComplete="on"
             className="border rounded p-2 bg-slate-200 text-black"
           />
         );
@@ -151,8 +152,9 @@ const Input = ({
       <div className="flex flex-col gap-4 justify-center items-center">
         {fields.map(field => (
           <div key={field.name} className="flex flex-col gap-2 justify-center items-center">
-            <label>{field.label}</label>
-            {renderInputFields(field)}
+            <label className="flex flex-col gap-2 justify-center items-center">{field.label}
+              {renderInputFields(field)}
+              </label>
           </div>
         ))}
       </div>
@@ -162,7 +164,7 @@ const Input = ({
       <button 
         type="submit" 
         disabled={isLoading}
-        className="submit-button"
+        className="m-2"
       >
         {isLoading ? (loadingText || "Processing...") : (submitText || "Submit")}
       </button>
