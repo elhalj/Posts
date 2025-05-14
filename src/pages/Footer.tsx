@@ -8,7 +8,7 @@ const Footer = () => {
           <Nav className='flex justify-center items-center gap-6 w-full'>
               <div className='flex gap-1'>
                   <p>All rights reserved</p>
-                  <p>&copy; 2025</p>
+          <p>&copy; { new Date().getFullYear()}</p>
               </div>
               <div className='flex gap-1 border-l-2 pl-2'>
                   <p><a href="#">Facebook</a></p>
