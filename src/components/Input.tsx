@@ -227,7 +227,7 @@ const Input = ({
             className="flex flex-col gap-2 justify-center items-center"
           >
             <label className="flex flex-col gap-2 justify-center items-center">
-              <p className="font-bold">{field.label}</p>
+              <p className="font-bold uppercase">{field.label}</p>
               {renderInputFields(field)}
             </label>
           </div>
