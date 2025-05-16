@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Input from "../../components/Input"
+import donnee from "../../api/api.json"
 
 const field = [
   {
@@ -64,26 +65,70 @@ const AddCard = () => {
   category: '',
   tags: []});
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
     
     // Création d'un FormData pour récupérer les données du formulaire
     const formDataSubmit = new FormData(e.currentTarget);
     
-    // Récupération des valeurs
-    console.log({
-      title: formDataSubmit.get('title'),
-      description: formDataSubmit.get('description'),
-      image: formDataSubmit.get('image'),
-      category: formDataSubmit.get('category'),
-      tags: formDataSubmit.getAll('tags') // Utilisation de getAll pour les checkboxes
-    });
+    try {
+      // Récupération des valeurs
+      console.log({
+        title: formDataSubmit.get('title'),
+        description: formDataSubmit.get('description'),
+        image: formDataSubmit.get('image'),
+        category: formDataSubmit.get('category'),
+        tags: formDataSubmit.getAll('tags') // Utilisation de getAll pour les checkboxes
+      });
+
+      // Création d'un nouvel objet card avec tous les champs nécessaires
+      const newCard = {
+        id: Date.now(),
+        title: formDataSubmit.get('title') as string,
+        description: formDataSubmit.get('description') as string,
+        category: formDataSubmit.get('category') as string,
+        tags: formDataSubmit.getAll('tags') as string[],
+        image: formData.image ? URL.createObjectURL(formData.image) : "https://picsum.photos/200/300",
+        author: "User", // Ajouter l'auteur (à remplacer par l'utilisateur connecté)
+        date: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
+        comments: [] // Initialiser avec un tableau vide de commentaires
+      }
+      
+      // Ajouter la nouvelle carte au tableau de données
+      donnee.push(newCard);
+      
+      // Dans un environnement réel, vous devriez envoyer ces données à une API
+      // Exemple avec fetch:
+      // const response = await fetch('/api/cards', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(newCard)
+      // });
+      // if (!response.ok) throw new Error('Failed to save card');
+      
+      // Réinitialiser le formulaire après soumission réussie
+      e.currentTarget.reset();
+      setFormData({title: '', description: '', image: null, category: '', tags: []});
+      
+      // Afficher un message de succès (vous pourriez utiliser une notification)
+      alert('Card added successfully!');
+    } catch (err) {
+      console.error('Error adding card:', err);
+      setError(err instanceof Error ? err.message : 'Failed to add card');
+    } finally {
+      setIsLoading(false);
+    }
 }
 
   return (
     <div>
       {/* <h1>Add Card</h1> */}
-      <Input fields={field} handleSubmit={ handleSubmit} isLoading={false} initialData={formData} loadingText={"Enregistrement"} submitText={"Ajouter"} error={null} className="container mx-auto my-4 p-4 blackBlue rounded-lg"/>
+      <Input fields={field} handleSubmit={handleSubmit} isLoading={isLoading} initialData={formData} loadingText={"Enregistrement"} submitText={"Ajouter"} error={error} className="container mx-auto my-4 p-4 blackBlue rounded-lg"/>
     </div>
   )
 }

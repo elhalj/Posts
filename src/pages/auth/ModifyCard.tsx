@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import donnee from '../../api/api.json';
 import Input from "../../components/Input";
+import { BiArrowToLeft } from "react-icons/bi";
 
 const field = [
   {
@@ -89,27 +90,39 @@ const ModifyCard = () => {
     const formDataSubmit = new FormData(e.currentTarget);
     
     const updatedData = {
-      ...data,
+      id: data?.id ?? Date.now(),
       title: formDataSubmit.get('title') as string,
       description: formDataSubmit.get('description') as string,
       category: formDataSubmit.get('category') as string,
       tags: formDataSubmit.getAll('tags') as string[],
-      image: formDataSubmit.get('image') as File || data?.image // Garder l'ancienne image si pas de nouvelle
+      image: data?.image || "", // Keep as string, since File is not supported in donnee
+      author: data?.author || "Unknown",
+      date: data?.date || new Date().toISOString(),
+      comments: data?.comments || []
     };
 
+    donnee.push(updatedData);
     console.log(updatedData);
     // Ici vous pouvez ajouter votre logique pour sauvegarder les modifications
   };
 
   return (
     <div className="container relative mx-auto my-6 p-1 flex flex-col overflow-y-scroll scrollbar [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
-      
+        <button type="button" className="w-1/5 mt-1">
+          <NavLink
+            to={"/dashboard"}
+            className="flex items-center justify-center gap-2"
+          >
+            <BiArrowToLeft className="w-6 h-6" />
+            Retour
+          </NavLink>
+        </button>
         <Input 
           fields={field} 
           handleSubmit={handleSubmit} 
           isLoading={false} 
           initialData={initialFormData}
-          submitText="Modifier"
+          submitText={data ? "Modifier" : "Ajouter"}
           loadingText="Modification en cours..."
         />
     </div>

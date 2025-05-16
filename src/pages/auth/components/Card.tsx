@@ -50,7 +50,7 @@ const Card = ({ data }: CardProps) => {
               <Link to={`/dashboard/posts/${item.id}`} >Lire la suite...</Link>
               </button>
               <button type="button">
-              <Link to={`/item/${item.id}/edit`} >Modifier</Link>
+              <Link to={`/dashboard/item/${item.id}/edit`} >Modifier</Link>
               </button>
               <button type="button" onClick={() => setItems(items.filter((i) => i.id !== item.id))}>Supprimer</button>
             </div>
