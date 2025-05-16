@@ -10,6 +10,7 @@ import AuthLayout from "./components/layouts/AuthLayout/AuthLayout"
 import Dashboard from "./pages/auth/Dashboard"
 import AddCard from "./pages/auth/AddCard"
 import ModifyCard from "./pages/auth/ModifyCard"
+import ReadItems from "./pages/auth/components/ReadItems"
 
 const App = () => {
   const isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
@@ -36,7 +37,8 @@ const App = () => {
         <Route path="/dashboard" element={<AuthLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="add" element={<AddCard />} />
-          <Route path="modify" element={<ModifyCard />} />
+          <Route path="item/:id/edit" element={<ModifyCard />} />
+          <Route path="posts/:id" element={<ReadItems />} />
         </Route>
       </Routes>
     </>

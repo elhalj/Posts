@@ -42,10 +42,18 @@ const Card = ({ data }: CardProps) => {
             <p className="text-sm text-gray-500">Category: {item.category}</p>
             <div className="flex gap-2">
               {item.tags.map((tag, index) => (
-                <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{tag}</span>
+                <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">#{tag}</span>
               ))}
             </div>
-            <div><Link to={`/item/${item.id}`} className="text-sm text-gray-600 bg-indigo-100 p-1 rounded-2xl">Lire la suite...</Link></div>
+            <div className="flex gap-2">
+              <button type="button">
+              <Link to={`/dashboard/posts/${item.id}`} >Lire la suite...</Link>
+              </button>
+              <button type="button">
+              <Link to={`/item/${item.id}/edit`} >Modifier</Link>
+              </button>
+              <button type="button" onClick={() => setItems(items.filter((i) => i.id !== item.id))}>Supprimer</button>
+            </div>
           </div>
         ))}
         </div>

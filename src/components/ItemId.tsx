@@ -1,4 +1,5 @@
 
+import { BiArrowToLeft } from 'react-icons/bi'
 import donnee from '../api/api.json'
 import { NavLink, useParams } from 'react-router-dom'
 
@@ -30,7 +31,15 @@ const ItemId = () => {
   return (
     <div className="container relative mx-40 p-1 flex flex-col overflow-y-scroll scrollbar [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
       <div className="flex flex-col gap-4">
-        <NavLink to={"/"} className='text-white  bg-indigo-900 p-2 m-1 w-sm rounded-full'>Retour</NavLink>
+        <button type="button" className="w-1/5 mt-1">
+                  <NavLink
+                    to={"/"}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <BiArrowToLeft className="w-6 h-6" />
+                    Retour
+                  </NavLink>
+                </button>
         <div className="flex flex-col gap-2 p-2">
           <h2 className="text-xl font-bold">{data.title}</h2>
           <p>{data.description}</p>
@@ -39,7 +48,7 @@ const ItemId = () => {
           <p className="text-sm text-gray-500">Category: {data.category}</p>
           <div className="flex gap-2">
             {data.tags.map((tag, index) => (
-              <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{tag}</span>
+              <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">#{tag}</span>
             ))}
           </div>
           <div className='flex flex-col gap-2'>

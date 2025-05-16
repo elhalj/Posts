@@ -2,6 +2,19 @@ import { useState, ReactNode, ChangeEvent } from "react";
 
 type FormValue = string | boolean | File | null | undefined | string[];
 type FormData = Record<string, FormValue>;
+// Ajoutez ces interfaces en haut du fichier
+// interface CardData {
+//   id?: number;
+//   title: string;
+//   description: string;
+//   image: string | null;
+//   image_preview?: string;
+//   category: string;
+//   tags: string[];
+//   author: string;
+//   date: string;
+//   comments: any[];
+// }
 
 interface Field {
   label: string;

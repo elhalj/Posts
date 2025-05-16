@@ -56,7 +56,7 @@ const Home = () => {
             <p className="text-sm text-gray-500">Category: {item.category}</p>
             <div className="flex gap-2">
               {item.tags.map((tag, index) => (
-                <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{tag}</span>
+                <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">#{tag}</span>
               ))}
             </div>
             <div><Link to={`/item/${item.id}`}>Lire la suite</Link></div>
