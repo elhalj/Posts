@@ -1,4 +1,3 @@
-
 import { BiArrowToLeft } from 'react-icons/bi'
 import donnee from '../api/api.json'
 import { NavLink, useParams } from 'react-router-dom'
@@ -16,7 +15,7 @@ import { NavLink, useParams } from 'react-router-dom'
 //     id: number,
 //     author: string,
 //     date: string,
-//     content?: string
+//     content?: string | undefined
 //   }[]
 // }
 
@@ -52,7 +51,7 @@ const ItemId = () => {
             ))}
           </div>
           <div className='flex flex-col gap-2'>
-            {data.comments.map((comment) => (
+            {data.comments && data.comments.map((comment) => (
               <div key={comment.id} className="flex flex-col gap-2 p-2 border-b-2">
                 <p className="text-sm text-gray-500">Comment by {comment.author} on {comment.date}</p>
                 <p className="text-sm">{comment.content}</p>
@@ -66,4 +65,3 @@ const ItemId = () => {
 }
 
 export default ItemId
-

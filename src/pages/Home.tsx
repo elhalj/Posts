@@ -11,7 +11,7 @@ interface Data {
   date: string,
   category: string,
   tags: string[],
-  comments: {
+  comments?: {
     id: number,
     author: string,
     date: string,
@@ -44,7 +44,7 @@ const Home = () => {
                 <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">#{tag}</span>
               ))}
             </div>
-            <div><Link to={`/item/${item.id}`}>Lire la suite</Link></div>
+            <div><Link to={`/item/${item.id}`} className="text-gray-500">Lire la suite</Link></div>
           </div>
         ))}
         </div>
