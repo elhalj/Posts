@@ -1,0 +1,15 @@
+# robots.txt file for https://posts-seven-red.vercel.app/
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://posts-seven-red.vercel.app/sitemap.xml
+
+# Specific directories
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+
+# Crawl delay
+User-agent: *
+Crawl-delay: 10
