@@ -55,7 +55,7 @@ const ItemId = () => {
             {data.comments.map((comment) => (
               <div key={comment.id} className="flex flex-col gap-2 p-2 border-b-2">
                 <p className="text-sm text-gray-500">Comment by {comment.author} on {comment.date}</p>
-                <p className="text-sm">{comment.content}</p>
+                <p className="text-sm">{comment?.content}</p>
               </div>
             ))}
           </div>
