@@ -2,26 +2,26 @@ import { BiArrowToLeft } from 'react-icons/bi'
 import donnee from '../api/api.json'
 import { NavLink, useParams } from 'react-router-dom'
 
-// interface Data {
-//   id: number,
-//   title: string,
-//   description: string,
-//   image: string,
-//   author: string,
-//   date: string,
-//   category: string,
-//   tags: string[],
-//   comments: {
-//     id: number,
-//     author: string,
-//     date: string,
-//     content?: string | undefined
-//   }[]
-// }
+interface Data {
+  id: number,
+  title: string,
+  description: string,
+  image: string,
+  author: string,
+  date: string,
+  category: string,
+  tags: string[],
+  comments?: {
+    id: number,
+    author: string,
+    date: string,
+    content?: string
+  }[]
+}
 
 const ItemId = () => {
   const { id } = useParams<{ id: string }>()
-  const data = donnee.find((item) => item.id.toString() === id)
+  const data = donnee.find((item) => item.id.toString() === id) as Data | undefined
 
   if (!data) {
     return <div>Item not found</div>

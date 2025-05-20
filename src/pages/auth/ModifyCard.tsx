@@ -52,18 +52,20 @@ const field = [
   }
 ];
 
-interface CardData {
-  id?: number;
-  title: string;
-  description: string;
-  image: string | null;
-  image_preview?: string;
-  category: string;
-  tags: string[];
-  author: string;
-  date: string;
-  comments: string[];
-}
+
+
+// interface CardData {
+//   id?: number;
+//   title: string;
+//   description: string;
+//   image: string | null;
+//   image_preview?: string;
+//   category: string;
+//   tags: string[];
+//   author: string;
+//   date: string;
+//   comments?: any[];
+// }
 
 
 
@@ -72,7 +74,7 @@ const ModifyCard = () => {
   const data = donnee.find((item) => item.id.toString() === id);
 
   // Convertir les données initiales au format attendu par le composant Input
-  const initialFormData: CardData = {
+  const initialFormData = {
     title: data?.title || "",
     description: data?.description || "",
     image: null, // On ne peut pas initialiser directement un File
@@ -80,8 +82,7 @@ const ModifyCard = () => {
     category: data?.category || "",
     tags: data?.tags || [],
     author: data?.author || "",
-    date: data?.date || "",
-    comments: data?.comments || []
+    date: data?.date || ""
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -116,8 +117,9 @@ const ModifyCard = () => {
             <BiArrowToLeft className="w-6 h-6" />
             Retour
           </NavLink>
-        </button>
-        <Input 
+      </button>
+      <div className="flex flex-col items-center w-full">
+         <Input 
           fields={field} 
           handleSubmit={handleSubmit} 
           isLoading={false} 
@@ -125,6 +127,7 @@ const ModifyCard = () => {
           submitText={data ? "Modifier" : "Ajouter"}
           loadingText="Modification en cours..."
         />
+      </div>
     </div>
   );
 };
