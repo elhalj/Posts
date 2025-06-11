@@ -11,9 +11,21 @@ const field = [
   },
   {
     label: "Description",
-    type: "textarea",
+    type: "text",
     name: "description",
     placeholder: "Enter the decription",
+  },
+  {
+    label: "Content",
+    type: "textarea",
+    name: "content",
+    placeholder: "Enter the content",
+  },
+  {
+    label: "Author",
+    type: "text",
+    name: "author",
+    placeholder: "le nom de l'auteur",
   },
   {
     label: "Image",
@@ -27,12 +39,14 @@ const field = [
     name: "category",
     placeholder: "Select a category",
     options: [
-      { label: "Sante", value: "sante" },
-      { label: "Education", value: "education" },
-      { label: "Finance", value: "finance" },
-      { label: "Sport", value: "sport" },
-      { label: "Culture", value: "culture" },
-      { label: "Politique", value: "politique" },
+      { label: "Sante", value: "Santé" },
+      { label: "Education", value: "Éducation" },
+      { label: "Finance", value: "Finance" },
+      { label: "Sport", value: "Sport" },
+      { label: "Culture", value: "Culture" },
+      { label: "Technologie", value: "Technologie" },
+      { label: "Voyage", value: "Voyage" },
+      { label: "Politique", value: "Politique" },
     ]
   },
   {
@@ -54,16 +68,25 @@ const field = [
 type FormDatas = {
   title: string;
   description: string;
+  content: string;
+  author: string;
   image: File | null;
   category: string;
   tags: string[];
+  slug?: string;
+  statut?: string;
 }
 const AddCard = () => {
   const [formData, setFormData] = useState<FormDatas>({title: '',
-  description: '',
+    description: '',
+    content: '',
+    author: '',
   image: null,
   category: '',
-  tags: []});
+  tags: [],
+  slug: '',
+  statut: ''
+});
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -113,7 +136,7 @@ const AddCard = () => {
       
       // Réinitialiser le formulaire après soumission réussie
       e.currentTarget.reset();
-      setFormData({title: '', description: '', image: null, category: '', tags: []});
+      setFormData({ title: '', description: '', image: null, category: '', content: '', author:'', tags: []});
       
       // Afficher un message de succès (vous pourriez utiliser une notification)
       alert('Card added successfully!');
