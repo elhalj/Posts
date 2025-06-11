@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import donnee from '../api/api.json'
+import donnee from '../services/api/api.json'
 import { Link } from "react-router-dom"
 
 interface Data {

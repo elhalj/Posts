@@ -1,5 +1,5 @@
 import Card from "./components/Card"
-import donnee from "../../api/api.json"
+import donnee from "../../services/api/api.json"
 
 const Dashboard = () => {
   return (

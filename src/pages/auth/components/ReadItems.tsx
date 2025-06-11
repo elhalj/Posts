@@ -1,5 +1,5 @@
 import { NavLink, useParams } from "react-router-dom";
-import donnee from "../../../api/api.json";
+import donnee from "../../../services/api/api.json";
 import { BiArrowToLeft } from "react-icons/bi";
 
 const ReadItems = () => {
