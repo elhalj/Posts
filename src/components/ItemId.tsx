@@ -1,5 +1,5 @@
 import { BiArrowToLeft } from 'react-icons/bi'
-import donnee from '../api/api.json'
+import donnee from '../services/api/api.json'
 import { NavLink, useParams } from 'react-router-dom'
 
 interface Data {
