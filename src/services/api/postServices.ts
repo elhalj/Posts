@@ -1,7 +1,7 @@
 import { PostProps } from "../../models/PostProps";
 import api from "./api";
 
-type CreatePostDTO = Pick<PostProps, "title" | "content" | "image" | "category" | "tags">;
+type CreatePostDTO = Pick<PostProps, "title" | "content" | "description" | "image" | "category" | "tags">;
 // Service to handle API calls related to posts
 const postService = {
     createPost: async (postData: CreatePostDTO) => {
