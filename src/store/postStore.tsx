@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { PostProps } from "../models/PostProps";
+import type { PostProps } from "../models/PostProps";
 
 
 
