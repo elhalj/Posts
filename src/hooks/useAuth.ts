@@ -8,18 +8,14 @@ export const useAuth = () => {
     const handleLogin = useMutation({
         mutationFn: (credential: User) => authService.login(credential),
         onSuccess: (data) => {
-            const { user, token } = data;
-            storeLogin(user.user, token.token);
-            localStorage.setItem("token", token);
+            storeLogin(data.user, data.token.token);
         }
     });
 // user registration
     const handleRegister = useMutation({
         mutationFn: (userData: { email: string; password: string; name: string }) => authService.register(userData),
         onSuccess: (data) => {
-            const { user, token } = data;
-            storeLogin(user.user, token.token);
-            localStorage.setItem("token", token);
+            storeLogin(data.user, data.token.token);
         }
     })
 // user logout

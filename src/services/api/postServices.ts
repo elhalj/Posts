@@ -1,18 +1,10 @@
+import { PostProps } from "../../models/PostProps";
 import api from "./api";
 
-type PostProps = {
-    title: string;
-    description: string;
-    content: string;
-    image: string;
-    author: string;
-    date: string;
-    category: string;
-    tags: string[];
-}
+type CreatePostDTO = Pick<PostProps, "title" | "content" | "description" | "image" | "category" | "tags">;
 // Service to handle API calls related to posts
 const postService = {
-    createPost: async (postData: PostProps) => {
+    createPost: async (postData: CreatePostDTO) => {
         const response = await api.post("/article/ajouterArticle", postData);
         return response.data;
     },
@@ -27,7 +19,7 @@ const postService = {
         return response.data;
     },
 
-    updatePost: async (postId: string, postData: PostProps) => {
+    updatePost: async (postId: string, postData: Partial<CreatePostDTO>) => {
         const response = await api.put(`/article/${postId}`, postData);
         return response.data;
     },

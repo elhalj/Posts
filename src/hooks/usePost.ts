@@ -1,53 +1,42 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import usePostStore, { PostProps } from "../store/postStore"
+import usePostStore from "../store/postStore"
 import postService from "../services/api/postServices";
+import axios from "axios";
+import type { PostProps } from "../models/PostProps";
 
 
 export const usePost = () => {
     const queryClient = useQueryClient();
-    const { setPosts, setLoading, setError, addPost, updatePost, deletePost } = usePostStore();
+    const { setPosts,  setError } = usePostStore();
 
-    const handleSetPosts = useMutation({
+    const handleCreatePosts = useMutation({
         mutationFn: (newPost: PostProps) => postService.createPost(newPost),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['posts'] })
         }
     });
 
-    const handleGetPosts = useQuery({
+    const handleGetPosts = useQuery<PostProps[], Error>({
         queryKey: ["posts"],
         queryFn: async () => {
-            setLoading(true);
             try {
                 const response = await postService.getPosts();
                 setPosts(response.data);
-                setLoading(false);
                 return response.data;
             } catch (error) {
-                if (
-                    error &&
-                    typeof error === "object" &&
-                    "response" in error &&
-                    error.response &&
-                    typeof error.response === "object" &&
-                    "data" in error.response &&
-                    error.response.data &&
-                    typeof error.response.data === "object" &&
-                    "message" in error.response.data
-                ) {
-                    type ErrorResponse = { response: { data: { message: string } } };
-                    setError((error as ErrorResponse).response.data.message);
+                if (axios.isAxiosError(error)) {
+                    setError(error.response?.data?.message || "An error occurred while fetching posts");
                 } else {
-                    setError("An error occurred while fetching posts");
+                    setError("An unexpected error occurred");
                 }
-                setLoading(false);
                 throw error;
             }
-        }
+        },
+        staleTime:  5 * 60 * 1000, // 5 minutes
     })
 
     return {
-        handleSetPosts,
+        handleCreatePosts,
         handleGetPosts,
     }
 }
