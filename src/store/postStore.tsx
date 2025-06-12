@@ -1,22 +1,7 @@
 import { create } from "zustand";
+import { PostProps } from "../models/PostProps";
 
-type PostProps = {
-  _id: number;
-  title: string;
-  description: string;
-  content: string;
-  image: string;
-  author: string;
-  date: string;
-  category: string;
-  tags: string[];
-  comments?: {
-    id: number;
-    author: string;
-    date: string;
-    content?: string;
-  }[];
-};
+
 
 type PostStore = {
   posts: PostProps[];
@@ -51,4 +36,4 @@ const usePostStore = create<PostStore>((set) => ({
 }));
 
 export default usePostStore;
-export type { PostProps, PostStore };
+export type { PostStore };

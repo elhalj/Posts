@@ -11,7 +11,7 @@ const api = axios.create({
 // interceptor for token
 api.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().token;
+    const {token} = useAuthStore.getState();
     // If the token exists, set it in the Authorization header
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

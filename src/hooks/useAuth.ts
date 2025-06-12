@@ -10,7 +10,6 @@ export const useAuth = () => {
         onSuccess: (data) => {
             const { user, token } = data;
             storeLogin(user.user, token.token);
-            localStorage.setItem("token", token);
         }
     });
 // user registration
@@ -19,7 +18,6 @@ export const useAuth = () => {
         onSuccess: (data) => {
             const { user, token } = data;
             storeLogin(user.user, token.token);
-            localStorage.setItem("token", token);
         }
     })
 // user logout
