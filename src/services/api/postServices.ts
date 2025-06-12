@@ -1,8 +1,18 @@
 import api from "./api";
 
+type PostProps = {
+    title: string;
+    description: string;
+    content: string;
+    image: string;
+    author: string;
+    date: string;
+    category: string;
+    tags: string[];
+}
 // Service to handle API calls related to posts
 const postService = {
-    createPost: async (postData: { title: string; content: string }) => {
+    createPost: async (postData: PostProps) => {
         const response = await api.post("/article/ajouterArticle", postData);
         return response.data;
     },
@@ -17,7 +27,7 @@ const postService = {
         return response.data;
     },
 
-    updatePost: async (postId: string, postData: { title: string; content: string }) => {
+    updatePost: async (postId: string, postData: PostProps) => {
         const response = await api.put(`/article/${postId}`, postData);
         return response.data;
     },
