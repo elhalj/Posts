@@ -18,6 +18,7 @@ export const useAuth = () => {
             storeLogin(data.user, data.token.token);
         }
     })
+  
 // user logout
   const handleLogout = () => {
     storeLogout();
