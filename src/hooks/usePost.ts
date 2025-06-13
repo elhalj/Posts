@@ -10,7 +10,7 @@ export const usePost = () => {
     const { setPosts,  setError } = usePostStore();
 
     const handleCreatePosts = useMutation({
-        mutationFn: (newPost: PostProps) => postService.createPost(newPost),
+        mutationFn: (newPost: Omit<PostProps, '_id'>) => postService.createPost(newPost),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['posts'] })
         }
