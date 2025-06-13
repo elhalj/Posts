@@ -34,7 +34,7 @@ jobs:
           git config user.email "actions@github.com"
 
           # Pousse les changements
-          git push origin main
+          git push origin development
         env:
           # Autorise npm à faire des commits
           GIT_AUTHOR_NAME: "github-actions"
