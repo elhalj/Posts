@@ -2,13 +2,13 @@ name: Auto-Bump Version
 
 on:
   push:
-    branches: ["main"] # Se déclenche sur push vers main
+    branches: ["development"] # Se déclenche sur push vers development
 
 jobs:
   update-version:
     runs-on: ubuntu-latest
     # Skip si commit contient [skip-version]
-    if: '!contains(github.event.head_commit.message, "[skip-version]")'
+    if: ${{ !contains(github.event.head_commit.message, '[skip-version]') }}
 
     steps:
       - name: Checkout Code
@@ -34,7 +34,7 @@ jobs:
           git config user.email "actions@github.com"
 
           # Pousse les changements
-          git push origin main
+          git push origin development
         env:
           # Autorise npm à faire des commits
           GIT_AUTHOR_NAME: "github-actions"
