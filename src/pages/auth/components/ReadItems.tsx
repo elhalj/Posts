@@ -4,15 +4,26 @@ import usePostStore from "../../../store/postStore";
 
 const ReadItems = () => {
   const { id } = useParams<{ id: string }>();
-  const { posts } = usePostStore();
+  const { posts, isLoading, error } = usePostStore();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   const data = posts.find((item) => item._id.toString() === id);
 
   if (!data) {
     return <div>Item not found</div>;
   }
 
+  const formattedDate = new Date(data.createdAt).toLocaleString();
+
   return (
-    <div className="container relative mx-auto my-6 p-1 flex flex-col overflow-y-scroll scrollbar [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
+    <div className="container relative mx-auto my-6 p-1 flex flex-col overflow-y-scroll [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
       <div className="flex flex-col gap-4">
         <button type="button" className="w-1/5 mt-1">
           <NavLink
@@ -23,7 +34,7 @@ const ReadItems = () => {
             Retour
           </NavLink>
         </button>
-        <div className="flex flex-col justify-center items-start gap-2 p-2 ">
+        <div className="flex flex-col justify-center items-start gap-2 p-2">
           <div className="w-full p-2 bg-slate-50 border border-gray-500 rounded-lg shadow-md">
             <img
               src={data.image}
@@ -36,7 +47,7 @@ const ReadItems = () => {
           <p>{data.description}</p>
           <p>{data.content}</p>
           <p className="text-sm text-gray-500">
-            By {data.author.name} on {data.createdAt}
+            By {data.author.name} on {formattedDate}
           </p>
           <p className="text-sm text-gray-500">Category: {data.category}</p>
           <div className="flex gap-2">
