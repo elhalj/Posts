@@ -25,10 +25,9 @@
     );
   }
 
-    
-    console.log(posts)
-    return (
-      <div className="container relative mx-28 p-1 flex flex-col overflow-y-scroll 
++    
++    return (
++      <div className="container relative mx-28 p-1 flex flex-col overflow-y-scroll 
       [&::-webkit-scrollbar]:hidden items-center justify-around rounded-lg w-[1200px]  h-[800px] blackBlue shadow-lg">
         <h1>Home</h1>
         <div className="grid grid-cols-3 gap-4">
