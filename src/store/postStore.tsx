@@ -17,7 +17,7 @@ type PostStore = {
 };
 
 const usePostStore = create<PostStore>((set) => ({
-  posts: [],
+  posts: [] as PostProps[],
   isLoading: false,
   error: null,
 

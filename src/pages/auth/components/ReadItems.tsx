@@ -1,10 +1,11 @@
 import { NavLink, useParams } from "react-router-dom";
-import donnee from "../../../services/api/api.json";
 import { BiArrowToLeft } from "react-icons/bi";
+import usePostStore from "../../../store/postStore";
 
 const ReadItems = () => {
   const { id } = useParams<{ id: string }>();
-  const data = donnee.find((item) => item.id.toString() === id);
+  const { posts } = usePostStore();
+  const data = posts.find((item) => item._id.toString() === id);
 
   if (!data) {
     return <div>Item not found</div>;
@@ -33,8 +34,9 @@ const ReadItems = () => {
 
           <h2 className="text-xl font-bold">{data.title}</h2>
           <p>{data.description}</p>
+          <p>{data.content}</p>
           <p className="text-sm text-gray-500">
-            By {data.author} on {data.date}
+            By {data.author.name} on {data.createdAt}
           </p>
           <p className="text-sm text-gray-500">Category: {data.category}</p>
           <div className="flex gap-2">
@@ -54,3 +56,4 @@ const ReadItems = () => {
 };
 
 export default ReadItems;
+
