@@ -1,7 +1,8 @@
 import { NavLink, useParams } from "react-router-dom";
 import donnee from '../../services/api/api.json';
-import Input from "../../components/Input";
+import Input, { FormData } from "../../components/Input";
 import { BiArrowToLeft } from "react-icons/bi";
+import { useState } from "react";
 
 const field = [
   {
@@ -107,6 +108,19 @@ const ModifyCard = () => {
     // Ici vous pouvez ajouter votre logique pour sauvegarder les modifications
   };
 
+  const [formData, setFormData] = useState(initialFormData);
+
+  function handleFieldChange(name: string, value: FormData): void {
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+      // Special handling for image files
+      ...(name === 'image' && value instanceof File 
+        ? { image_preview: URL.createObjectURL(value) }
+        : {})
+    }));
+  }
+
   return (
     <div className="container relative mx-auto my-6 p-1 flex flex-col overflow-y-scroll scrollbar [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
         <button type="button" className="w-1/5 mt-1">
@@ -123,9 +137,10 @@ const ModifyCard = () => {
           fields={field} 
           handleSubmit={handleSubmit} 
           isLoading={false} 
-          initialData={initialFormData}
           submitText={data ? "Modifier" : "Ajouter"}
           loadingText="Modification en cours..."
+          value={initialFormData}
+          onChange={handleFieldChange}
         />
       </div>
     </div>

@@ -1,31 +1,23 @@
 import { BiArrowToLeft } from 'react-icons/bi'
-import donnee from '../services/api/api.json'
+// import donnee from '../services/api/api.json'
 import { NavLink, useParams } from 'react-router-dom'
+import { PostProps } from '../models/PostProps'
+import usePostStore from '../store/postStore'
 
-interface Data {
-  id: number,
-  title: string,
-  description: string,
-  image: string,
-  author: string,
-  date: string,
-  category: string,
-  tags: string[],
-  comments?: {
-    id: number,
-    author: string,
-    date: string,
-    content?: string
-  }[]
-}
+
 
 const ItemId = () => {
   const { id } = useParams<{ id: string }>()
-  const data = donnee.find((item) => item.id.toString() === id) as Data | undefined
+  const { posts } = usePostStore()
+  const data = posts.find((item) => item._id.toString() === id) as PostProps | undefined
 
   if (!data) {
     return <div>Item not found</div>
   }
+
+  const formattedDate = data.createdAt
+    ? new Date(data.createdAt).toLocaleString()
+    : "Unknown date";
 
   return (
     <div className="container relative mx-40 p-1 flex flex-col overflow-y-scroll scrollbar [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
@@ -43,7 +35,7 @@ const ItemId = () => {
           <h2 className="text-xl font-bold">{data.title}</h2>
           <p>{data.description}</p>
           <img src={data.image} alt={data.title} className="w-1/2 h-auto" />
-          <p className="text-sm text-gray-500">By {data.author} on {data.date}</p>
+          <p className="text-sm text-gray-500">By {data.author} on {formattedDate}</p>
           <p className="text-sm text-gray-500">Category: {data.category}</p>
           <div className="flex gap-2">
             {data.tags.map((tag, index) => (
