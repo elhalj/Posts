@@ -1,6 +1,6 @@
 import { NavLink, useParams } from "react-router-dom";
 import donnee from '../../services/api/api.json';
-import Input, { FormData } from "../../components/Input";
+import Input, { FormData as InputFormData } from "../../components/Input";
 import { BiArrowToLeft } from "react-icons/bi";
 import { useState } from "react";
 
@@ -110,7 +110,7 @@ const ModifyCard = () => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  function handleFieldChange(name: string, value: FormData): void {
+  function handleFieldChange(name: string, value: InputFormData): void {
     setFormData(prevData => ({
       ...prevData,
       [name]: value,

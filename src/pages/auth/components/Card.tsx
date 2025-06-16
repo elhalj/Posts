@@ -29,35 +29,33 @@ const Card = ({ data }: CardProps) => {
     setItems(data)
   },[data])
   return (
-    <div className="container relative mx-auto mb-4 p-1 flex flex-col overflow-y-scroll 
-     [&::-webkit-scrollbar]:hidden items-center justify-around rounded-lg w-[1200px]  h-[800px] blackBlue shadow-lg">
-      <h1>Posts</h1>
-      <div className="grid grid-cols-3  gap-6">
+    <div className="container mx-auto mb-4 p-1 flex flex-col overflow-y-scroll bg-slate-50 border border-gray-500 rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold">Posts</h1>
+      <div className="grid grid-cols-3 gap-6">
         {items.map((item) => (
-          <div key={item.id} className="flex flex-col justify-center items-center gap-2 p-2 bg-slate-50 border border-gray-500 rounded-lg shadow-md">
-            {/* <p>{item.description}</p> */}
-            <img src={item.image} alt={item.title} className="w-full h-[150px] rounded-lg" />
-            <h2 className="text-xl font-bold text-gray-500">{item.title}</h2>
-            <p className="text-sm text-gray-500">By {item.author} on {item.date}</p>
-            <p className="text-sm text-gray-500">Category: {item.category}</p>
+          <div key={item.id} className="flex flex-col justify-center items-start gap-2 p-4 rounded-lg shadow-md bg-white">
+            <img src={item.image} alt={item.title} className="w-full h-[150px] rounded-t-lg" />
+            <h2 className="text-xl font-bold text-gray-800">{item.title}</h2>
+            <p className="text-sm text-gray-600">{item.description}</p>
+            <p className="text-sm text-gray-600">By {item.author} on {item.date}</p>
+            <p className="text-sm text-gray-600">Category: {item.category}</p>
             <div className="flex gap-2">
               {item.tags.map((tag, index) => (
                 <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full">#{tag}</span>
               ))}
             </div>
-            <div className="flex gap-2">
-              <button type="button">
-              <Link to={`/dashboard/posts/${item.id}`} >Lire la suite...</Link>
+            <div className="flex gap-2 mt-4">
+              <button type="button" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                <Link to={`/dashboard/posts/${item.id}`}>Lire la suite...</Link>
               </button>
-              <button type="button">
-              <Link to={`/dashboard/item/${item.id}/edit`} >Modifier</Link>
+              <button type="button" className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full">
+                <Link to={`/dashboard/item/${item.id}/edit`}>Modifier</Link>
               </button>
-              <button type="button" onClick={() => setItems(items.filter((i) => i.id !== item.id))}>Supprimer</button>
+              <button type="button" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => setItems(items.filter((i) => i.id !== item.id))}>Supprimer</button>
             </div>
           </div>
         ))}
-        </div>
-      
+      </div>
     </div>
   )
 }

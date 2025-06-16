@@ -1,63 +1,84 @@
-// import donnee from '../services/api/api.json'
 import { Link } from "react-router-dom";
-// import { PostProps } from "../models/PostProps"
 import { usePost } from "../hooks/usePost";
 import usePostStore from "../store/postStore";
-// import usePostStore from "../store/postStore"
 
 const Home = () => {
   const { posts } = usePostStore();
   const { handleGetPosts } = usePost();
 
-  // Handle loading and error states
   if (handleGetPosts.isLoading) {
-    return <div>Loading posts...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   if (handleGetPosts.isError) {
-    return <div>Error loading posts: {handleGetPosts.error?.message}</div>;
+    return (
+      <div className="text-red-500 text-center p-4">
+        Error loading posts: {handleGetPosts.error?.message}
+      </div>
+    );
   }
 
   return (
-    <div
-      className="container relative mx-28 p-1 flex flex-col overflow-y-scroll 
-      [&::-webkit-scrollbar]:hidden items-center justify-around rounded-lg w-[1200px]  h-[800px] blackBlue shadow-lg"
-    >
-      <h1>Home</h1>
-      <div className="grid grid-cols-3 gap-4">
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
+        Latest Articles
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.map((item) => (
           <div
             key={item._id}
-            className="flex flex-col items-center gap-2 p-2 bg-slate-50 border border-gray-800 rounded-lg"
+            className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
           >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-52 rounded-sm"
-            />
-            <h2 className="text-xl font-bold">{item.title}</h2>
-            {/* <p>{item.description}</p> */}
-            <p className="text-sm text-gray-500">
-              By {item.author.name} on{" "}
-              {new Date(item.createdAt).toLocaleString()}
-            </p>
-            <p className="text-sm text-gray-500">Category: {item.category}</p>
-            <div className="flex gap-2">
-              {item.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="bg-blue-200 text-blue-800 px-2 py-1 rounded-full"
-                >
-                  #{tag}
+            <div className="relative">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute top-4 right-4">
+                <span className="bg-white/80 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm">
+                  {item.category}
                 </span>
-              ))}
+              </div>
             </div>
-            <div>
-              <Link to={`/item/${item._id}`} className="text-gray-500">
-                Lire la suite
+            
+            <div className="p-6">
+              <h2 className="text-2xl font-bold mb-3 text-gray-800 line-clamp-2">
+                {item.title}
+              </h2>
+              
+              <div className="flex items-center gap-2 mb-4">
+                <div className="text-sm text-gray-600">
+                  By {item.author}
+                </div>
+                <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                <div className="text-sm text-gray-600"></div>
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {item.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm hover:bg-blue-100 transition-colors"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+
+              <Link
+                to={`/item/${item._id}`}
+                className="inline-block mt-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
+              >
+                Read more →
               </Link>
             </div>
-          </div>
         ))}
       </div>
     </div>
