@@ -1,11 +1,16 @@
-import { PostProps } from "../../models/PostProps";
+
 import api from "./api";
 
-type CreatePostDTO = Pick<PostProps, "title" | "content" | "description" | "image" | "category" | "tags">;
+// Modifier le type pour accepter FormData
+type CreatePostDTO = FormData;
 // Service to handle API calls related to posts
 const postService = {
     createPost: async (postData: CreatePostDTO) => {
-        const response = await api.post("/article/ajouterArticle", postData);
+        const response = await api.post("/article/ajouterArticle", postData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
         return response.data;
     },
 

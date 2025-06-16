@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Input from "../../components/Input"
-import donnee from "../../services/api/api.json"
+// import donnee from "../../services/api/api.json"
+import { usePost } from "../../hooks/usePost";
 
 const field = [
   {
@@ -69,76 +70,55 @@ type FormDatas = {
   title: string;
   description: string;
   content: string;
+  image: string | File | null;
   author: string;
-  image: File | null;
   category: string;
   tags: string[];
-  slug?: string;
-  statut?: string;
 }
 const AddCard = () => {
-  const [formData, setFormData] = useState<FormDatas>({title: '',
+  const { handleCreatePosts } = usePost();
+  const [formData, setFormData] = useState<FormDatas>({
+    title: '',
     description: '',
     content: '',
     author: '',
-  image: null,
-  category: '',
-  tags: [],
-  slug: '',
-  statut: ''
-});
+    image: null,
+    category: '',
+    tags: [],
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFieldChange = (name: string, value: string | boolean | File | null | undefined | string[]) => {
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      if (name === "image" && value === null) {
+        newData.image = null
+      }
+      return newData;
+    });
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
     
-    // Création d'un FormData pour récupérer les données du formulaire
-    const formDataSubmit = new FormData(e.currentTarget);
-    
     try {
-      // Récupération des valeurs
-      console.log({
-        title: formDataSubmit.get('title'),
-        description: formDataSubmit.get('description'),
-        image: formDataSubmit.get('image'),
-        category: formDataSubmit.get('category'),
-        tags: formDataSubmit.getAll('tags') // Utilisation de getAll pour les checkboxes
-      });
-
-      // Création d'un nouvel objet card avec tous les champs nécessaires
-      const newCard = {
-        id: Date.now(),
-        title: formDataSubmit.get('title') as string,
-        description: formDataSubmit.get('description') as string,
-        category: formDataSubmit.get('category') as string,
-        tags: formDataSubmit.getAll('tags') as string[],
-        image: formData.image ? URL.createObjectURL(formData.image) : "https://picsum.photos/200/300",
-        author: "User", // Ajouter l'auteur (à remplacer par l'utilisateur connecté)
-        date: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
-        comments: [] // Initialiser avec un tableau vide de commentaires
+      if (!formData.image) {
+        throw new Error('Image is required');
       }
+      handleCreatePosts.mutateAsync({...formData, image: formData.image})
+      setFormData({
+        title: '',
+        description: '',
+        content: '',
+        image: null,
+        author: '',
+        category: '',
+        tags: [],
+      });
       
-      // Ajouter la nouvelle carte au tableau de données
-      donnee.push(newCard);
-      
-      // Dans un environnement réel, vous devriez envoyer ces données à une API
-      // Exemple avec fetch:
-      // const response = await fetch('/api/cards', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(newCard)
-      // });
-      // if (!response.ok) throw new Error('Failed to save card');
-      
-      // Réinitialiser le formulaire après soumission réussie
-      e.currentTarget.reset();
-      setFormData({ title: '', description: '', image: null, category: '', content: '', author:'', tags: []});
-      
-      // Afficher un message de succès (vous pourriez utiliser une notification)
       alert('Card added successfully!');
     } catch (err) {
       console.error('Error adding card:', err);
@@ -146,12 +126,12 @@ const AddCard = () => {
     } finally {
       setIsLoading(false);
     }
-}
+};
 
   return (
     <div>
       {/* <h1>Add Card</h1> */}
-      <Input fields={field} handleSubmit={handleSubmit} isLoading={isLoading} initialData={formData} loadingText={"Enregistrement"} submitText={"Ajouter"} error={error} className="container mx-auto my-4 p-4 blackBlue rounded-lg"/>
+      <Input fields={field} handleSubmit={handleSubmit} isLoading={isLoading} loadingText={"Enregistrement"} submitText={"Ajouter"} error={error} className="container mx-auto my-4 p-4 blackBlue rounded-lg" value={formData} onChange={handleFieldChange} />
     </div>
   )
 }

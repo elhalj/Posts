@@ -3,9 +3,9 @@ export type PostProps = {
   title: string;
   description: string;
   content: string;
-  image: string;
-  author: { id: number; name: string; date: string };
-  createdAt: string;
+  image: string | File | null;
+  author: string;
+  createdAt?: string;
   category: string;
   tags: string[];
   comments?: {
