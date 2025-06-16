@@ -47,7 +47,7 @@ const ReadItems = () => {
           <p>{data.description}</p>
           <p>{data.content}</p>
           <p className="text-sm text-gray-500">
-            By {data.author.name} on {formattedDate}
+            By {data.author} on {formattedDate}
           </p>
           <p className="text-sm text-gray-500">Category: {data.category}</p>
           <div className="flex gap-2">

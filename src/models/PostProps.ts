@@ -5,7 +5,7 @@ export type PostProps = {
   content: string;
   image: string | File | null;
   author: string;
-  createdAt?: string;
+  createdAt?: string | number | undefined;
   category: string;
   tags: string[];
   comments?: {
