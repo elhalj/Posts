@@ -21,6 +21,13 @@ const Home = () => {
       </div>
     );
   }
+  const defaultImage = '/path/to/default-image.jpg'; // Ajoutez votre chemin d'image par défaut
+
+  const getImageSrc = (image: string | File | null): string => {
+    if (typeof image === 'string') return image;
+    if (image instanceof File) return URL.createObjectURL(image);
+    return defaultImage;
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -33,11 +40,14 @@ const Home = () => {
             key={item._id}
             className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
           >
-            <div className="relative">
+            <div className="relative">{""}
               <img
-                src={item.image}
+                src={getImageSrc(item.image)}
                 alt={item.title}
                 className="w-full h-64 object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = defaultImage;
+                }}
               />
               <div className="absolute top-4 right-4">
                 <span className="bg-white/80 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm">
@@ -52,14 +62,11 @@ const Home = () => {
               </h2>
               
               <div className="flex items-center gap-2 mb-4">
-                <div className="text-sm text-gray-600">
-                  By {item.author}
-                </div>
-                <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-                <div className="text-sm text-gray-600"></div>
-                  {new Date(item.createdAt).toLocaleDateString()}
-                </div>
-              </div>
+  <div className="text-sm text-gray-600">
+    By {typeof item.author === 'object' ? item.author.name : item.author}
+  </div>
+  <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+</div>
 
               <div className="flex flex-wrap gap-2 mb-4">
                 {item.tags.map((tag, index) => (
@@ -67,7 +74,7 @@ const Home = () => {
                     key={index}
                     className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm hover:bg-blue-100 transition-colors"
                   >
-                    #{tag}
+                    #{tag }
                   </span>
                 ))}
               </div>
@@ -79,6 +86,7 @@ const Home = () => {
                 Read more →
               </Link>
             </div>
+          </div>
         ))}
       </div>
     </div>
@@ -86,3 +94,4 @@ const Home = () => {
 };
 
 export default Home;
+
