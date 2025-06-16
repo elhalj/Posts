@@ -1,7 +1,7 @@
 import { useState, ReactNode, ChangeEvent, useEffect } from "react";
 
 type FormValue = string | boolean | File | null | undefined | string[];
-type FormData = Record<string, FormValue>;
+export type FormData = Record<string, FormValue>;
 
 interface Field {
   label: string;

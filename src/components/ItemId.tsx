@@ -15,7 +15,9 @@ const ItemId = () => {
     return <div>Item not found</div>
   }
 
-  const formattedDate = new Date(data.createdAt).toLocaleString();
+  const formattedDate = data.createdAt
+    ? new Date(data.createdAt).toLocaleString()
+    : "Unknown date";
 
   return (
     <div className="container relative mx-40 p-1 flex flex-col overflow-y-scroll scrollbar [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
@@ -33,7 +35,7 @@ const ItemId = () => {
           <h2 className="text-xl font-bold">{data.title}</h2>
           <p>{data.description}</p>
           <img src={data.image} alt={data.title} className="w-1/2 h-auto" />
-          <p className="text-sm text-gray-500">By {data.author.name} on {formattedDate}</p>
+          <p className="text-sm text-gray-500">By {data.author} on {formattedDate}</p>
           <p className="text-sm text-gray-500">Category: {data.category}</p>
           <div className="flex gap-2">
             {data.tags.map((tag, index) => (

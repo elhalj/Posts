@@ -6,11 +6,7 @@ type CreatePostDTO = FormData;
 // Service to handle API calls related to posts
 const postService = {
     createPost: async (postData: CreatePostDTO) => {
-        const response = await api.post("/article/ajouterArticle", postData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
+        const response = await api.post("/article/ajouterArticle", postData);
         return response.data;
     },
 

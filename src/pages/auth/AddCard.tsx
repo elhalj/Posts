@@ -108,7 +108,7 @@ const AddCard = () => {
       if (!formData.image) {
         throw new Error('Image is required');
       }
-      handleCreatePosts.mutateAsync({...formData, image: formData.image})
+      await handleCreatePosts.mutateAsync({...formData, image: formData.image})
       setFormData({
         title: '',
         description: '',
