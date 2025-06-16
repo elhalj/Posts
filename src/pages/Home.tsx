@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { usePost } from "../hooks/usePost";
 import usePostStore from "../store/postStore";
+import error from "../assets/error.jpg"
 
 const Home = () => {
   const { posts } = usePostStore();
@@ -21,7 +22,7 @@ const Home = () => {
       </div>
     );
   }
-  const defaultImage = '/path/to/default-image.jpg'; // Ajoutez votre chemin d'image par défaut
+  const defaultImage = error; // Ajoutez votre chemin d'image par défaut
 
   const getImageSrc = (image: string | File | null): string => {
     if (typeof image === 'string') return image;
