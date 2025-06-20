@@ -10,13 +10,14 @@ const MainLayout = () => {
     const [showSignUp, setShowSignUp] = useState<boolean>(false)
   return (
     <>
-        {showLogin && (
+       
+      <Header showLogin={showLogin} setShowLogin={setShowLogin} showSignUp={showSignUp} setShowSignUp={setShowSignUp} />
+      {showLogin && (
             <Login setShowLogin={setShowLogin} showLogin={showLogin}  />
           )}
           {showSignUp && (
             <SignUp setShowSignUp={setShowSignUp} showSignUp={showSignUp} />
           )}
-      <Header showLogin={showLogin} setShowLogin={setShowLogin} showSignUp={ showSignUp} setShowSignUp={setShowSignUp} />
       <SideBar />
       <Footer />
     </>

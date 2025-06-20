@@ -2,6 +2,7 @@ import { useState } from "react";
 import Input from "../../components/Input"
 // import donnee from "../../services/api/api.json"
 import { usePost } from "../../hooks/usePost";
+import { PostProps } from "../../models/PostProps";
 
 const field = [
   {
@@ -66,18 +67,21 @@ const field = [
   }
 ]
 
-type FormDatas = {
-  title: string;
-  description: string;
-  content: string;
-  image: string | File | null;
-  author: string;
-  category: string;
-  tags: string[];
+// type FormDatas = {
+//   title: string;
+//   description: string;
+//   content: string;
+//   image: string | File | null;
+//   author: string;
+//   category: string;
+//   tags: string[];
+// }
+interface FieldError {
+  [key: string]: string;
 }
 const AddCard = () => {
   const { handleCreatePosts } = usePost();
-  const [formData, setFormData] = useState<FormDatas>({
+  const [formData, setFormData] = useState<Omit<PostProps, 'id' | 'createdAt' | 'updatedAt' | 'comments'>>({
     title: '',
     description: '',
     content: '',
@@ -90,42 +94,80 @@ const AddCard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [fieldErrors, setFieldErrors] = useState<FieldError>({});
+
+const validateField = (name: string, value: string | boolean | File | null | undefined | string[]) => {
+  switch(name) {
+    case 'title':
+      return !value ? 'Title is required' : '';
+    case 'description':
+      return !value ? 'Description is required' : '';
+    case 'content':
+      return !value ? 'Content is required' : '';
+    case 'category':
+      return !value ? 'Category is required' : '';
+    default:
+      return '';
+  }
+};
+  
   const handleFieldChange = (name: string, value: string | boolean | File | null | undefined | string[]) => {
     setFormData(prev => {
       const newData = { ...prev, [name]: value };
-      if (name === "image" && value === null) {
-        newData.image = null
-      }
       return newData;
     });
+    const error = validateField(name, value);
+  setFieldErrors(prev => ({
+    ...prev,
+    [name]: error
+  }));
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
     
-    try {
-      if (!formData.image) {
-        throw new Error('Image is required');
-      }
-      await handleCreatePosts.mutateAsync({...formData, image: formData.image})
+    
+  try {
+    // Add validation before submission
+    if (!formData.title.trim()) {
+      throw new Error('Title is required');
+    }
+    if (!formData.description.trim()) {
+      throw new Error('Description is required');
+    }
+    if (!formData.content.trim()) {
+      throw new Error('Content is required');
+    }
+    if (!formData.image) {
+      throw new Error('Image is required');
+    }
+    if (!formData.category) {
+      throw new Error('Category is required');
+    }
+    
+    const resetForm = () => {
       setFormData({
         title: '',
         description: '',
         content: '',
-        image: null,
         author: '',
+        image: null,
         category: '',
         tags: [],
       });
-      
-      alert('Card added successfully!');
-    } catch (err) {
-      console.error('Error adding card:', err);
-      setError(err instanceof Error ? err.message : 'Failed to add card');
-    } finally {
-      setIsLoading(false);
-    }
+      // setImagePreviews({});
+    };
+
+    await handleCreatePosts.mutateAsync({...formData, image: formData.image instanceof File ? formData.image : null});
+    alert('Card added successfully!');
+    resetForm();
+  } catch (err) {
+    console.error('Error adding card:', err);
+    setError((err as Error).message);
+  } finally {
+    setIsLoading(false);
+  }
 };
 
   return (
