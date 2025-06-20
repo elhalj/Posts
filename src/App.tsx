@@ -2,9 +2,6 @@ import { Route, Routes } from "react-router-dom"
 import _Layout from "./components/layouts/MainLayout/MainLayout"
 import Home from "./pages/Home"
 import About from "./pages/About"
-import Page from "./pages/Page"
-import Page2 from "./pages/Page2"
-import Page3 from "./pages/Page3"
 import ItemId from "./components/ItemId"
 import AuthLayout from "./components/layouts/AuthLayout/AuthLayout"
 import Dashboard from "./pages/auth/Dashboard"
@@ -28,9 +25,6 @@ const App = () => {
         <Route path="/" element={<_Layout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
-          <Route path="1" element={<Page />} />
-          <Route path="2" element={<Page2 />} />
-          <Route path="3" element={<Page3 />} />
           <Route path="item/:id" element={<ItemId />} />
           <Route path="*" element={<div>404</div>} />
         </Route>

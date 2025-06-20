@@ -22,6 +22,9 @@ export const usePost = () => {
         }
       });
       const response = await postService.createPost(formData);
+      return response.data;
+    },
+    onSuccess: (data: PostProps) => {
       return response;
     },
     onSuccess: (data) => {
