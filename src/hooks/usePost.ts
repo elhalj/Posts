@@ -22,9 +22,9 @@ export const usePost = () => {
         }
       });
       const response = await postService.createPost(formData);
-      return response;
+      return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: PostProps) => {
       addPost(data);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
