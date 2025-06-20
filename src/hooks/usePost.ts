@@ -25,6 +25,9 @@ export const usePost = () => {
       return response.data;
     },
     onSuccess: (data: PostProps) => {
+      return response;
+    },
+    onSuccess: (data) => {
       addPost(data);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
