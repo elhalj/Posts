@@ -27,11 +27,11 @@ const usePostStore = create<PostStore>((set) => ({
   addPost: (post) => set((state) => ({ posts: [...state.posts, post] })),
   updatePost: (id, updatedPost) =>
     set((state) => ({
-      posts: state.posts.map((post) => (post._id === id ? updatedPost : post)),
+      posts: state.posts.map((post) => (post.id === id ? updatedPost : post)),
     })),
   deletePost: (postId) =>
     set((state) => ({
-      posts: state.posts.filter((post) => post._id !== postId),
+      posts: state.posts.filter((post) => post.id !== postId),
     })),
 }));
 

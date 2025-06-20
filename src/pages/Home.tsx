@@ -9,7 +9,7 @@ const Home = () => {
 
   if (handleGetPosts.isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen w-full">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -38,7 +38,7 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.map((item) => (
           <div
-            key={item._id}
+            key={item.id}
             className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
           >
             <div className="relative">{""}
@@ -81,7 +81,7 @@ const Home = () => {
               </div>
 
               <Link
-                to={`/item/${item._id}`}
+                to={`/item/${item.id}`}
                 className="inline-block mt-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
               >
                 Read more →

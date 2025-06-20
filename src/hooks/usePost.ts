@@ -3,38 +3,32 @@ import usePostStore from "../store/postStore";
 import postService from "../services/api/postServices";
 import axios from "axios";
 import type { PostProps } from "../models/PostProps";
+import type { CreatePostDTO } from "../services/api/postServices";
 
 export const usePost = () => {
   const queryClient = useQueryClient();
   const { setPosts, addPost, setError } = usePostStore();
 
- const handleCreatePosts = useMutation({
-  mutationFn: async (newPost: Omit<PostProps, "_id">) => {
-    const formData = new FormData();
-    
-    // Ajouter tous les champs au FormData
-    Object.entries(newPost).forEach(([key, value]) => {
-      if (key === "tags" && Array.isArray(value)) {
-        // Envoyer les tags comme tableau JSON
-        formData.append(key, JSON.stringify(value));
-      } 
-      else if (value instanceof File) {
-        formData.append(key, value);
-      } 
-      else if (value !== null && value !== undefined) {
-        formData.append(key, value.toString());
-      }
-    });
-
-    const response = await postService.createPost(formData);
-    return response;
-  },
-  onSuccess: (data) => {
-    // Utiliser les données retournées par l'API
-    addPost(data);
-    queryClient.invalidateQueries({ queryKey: ["posts"] });
-  },
-});
+  const handleCreatePosts = useMutation({
+    mutationFn: async (newPost: CreatePostDTO) => {
+      const formData = new FormData();
+      Object.entries(newPost).forEach(([key, value]) => {
+        if (key === "tags" && Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+        } else if (value instanceof File) {
+          formData.append(key, value);
+        } else if (value !== null && value !== undefined) {
+          formData.append(key, value.toString());
+        }
+      });
+      const response = await postService.createPost(formData);
+      return response;
+    },
+    onSuccess: (data) => {
+      addPost(data);
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
 
   const handleGetPosts = useQuery<PostProps[], Error>({
     queryKey: ["posts"],
@@ -55,7 +49,7 @@ export const usePost = () => {
         throw error;
       }
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
   return {

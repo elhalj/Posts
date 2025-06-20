@@ -36,7 +36,7 @@ const Login = ({
   };
   return (
     <div
-      className={`absolute top-4 left-0 w-full h-full flex items-center justify-around bg-transparent z-[999] transform transition duration-500 ease-in-out ${
+      className={`sticky top-4 left-0 w-full h-screen flex items-center justify-around bg-blue-500/50 backdrop-blur-lg rounded-lg z-[999] transform transition duration-500 ease-in-out ${
         showLogin ? "scale-100 opacity-100" : "scale-0 opacity-0"
       }`}
     >
@@ -49,7 +49,13 @@ const Login = ({
             fields={field}
             handleSubmit={handleSubmit}
             isLoading={false}
-            initialData={formData}
+            value={formData}
+            onChange={(name, value) => {
+              setFormData((prev) => ({
+                ...prev,
+                [name]: value,
+              }));
+            }}
             submitText="Login"
           >
 

@@ -14,13 +14,20 @@ const ReadItems = () => {
     return <div>Error: {error}</div>;
   }
 
-  const data = posts.find((item) => item._id.toString() === id);
+  const data = posts.find((item) => item.id.toString() === id);
 
   if (!data) {
     return <div>Item not found</div>;
   }
 
   const formattedDate = new Date(data.createdAt).toLocaleString();
+
+  const defaultImage = error || '/path/to/default-image.jpg';
+  const getImageSrc = (image: string | File | null): string => {
+    if (typeof image === 'string') return image;
+    if (image instanceof File) return URL.createObjectURL(image);
+    return defaultImage;
+  };
 
   return (
     <div className="container relative mx-auto my-6 p-1 flex flex-col overflow-y-scroll [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
@@ -37,7 +44,7 @@ const ReadItems = () => {
         <div className="flex flex-col justify-center items-start gap-2 p-2">
           <div className="w-full p-2 bg-slate-50 border border-gray-500 rounded-lg shadow-md">
             <img
-              src={data.image}
+              src={getImageSrc(data.image)}
               alt={data.title}
               className="w-full h-[600px] rounded-lg"
             />
