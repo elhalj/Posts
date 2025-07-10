@@ -2,7 +2,9 @@
 
 export function registerServiceWorker() {
   // Check for StackBlitz environment first and exit early
-  if (window.location.hostname.includes('stackblitz')) {
+  if (window.location.hostname.includes('stackblitz') || 
+      window.location.href.includes('stackblitz.io') ||
+      window.location.href.includes('webcontainer')) {
     console.log('Service Worker non supporté dans cet environnement (StackBlitz)');
     return;
   }
