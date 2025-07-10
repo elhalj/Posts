@@ -1,5 +1,4 @@
 import { useState } from "react"
-import Input from "../../components/Input"
 
 const SignUp = ({setShowSignUp, showSignUp}: {setShowSignUp: React.Dispatch<React.SetStateAction<boolean>>, showSignUp: boolean }) => {
   const field = [
@@ -29,7 +28,20 @@ const SignUp = ({setShowSignUp, showSignUp}: {setShowSignUp: React.Dispatch<Reac
     password: string;
   };
 
-  const [formData, setFormData] = useState<SignUpFormData>({} as SignUpFormData);
+  const [formData, setFormData] = useState<SignUpFormData>({
+    name: "",
+    email: "",
+    password: ""
+  });
+
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name as keyof SignUpFormData]: value,
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,14 +53,23 @@ const SignUp = ({setShowSignUp, showSignUp}: {setShowSignUp: React.Dispatch<Reac
       <div className='container bg-white mx-22 p-1 flex flex-col  w-[600px] h-[600px] rounded-lg shadow-lg' >
         <button type="submit" onClick={() => setShowSignUp(false)}>close</button>
         <div className="flex flex-col justify-center items-center h-full">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {field.map(input => (
+              <div key={input.name} className="flex flex-col">
+                <label htmlFor={input.name}>{input.label}</label>
+                <input
+                  type={input.type}
+                  name={input.name}
+                  placeholder={input.placeholder}
+                  className="p-2 border-2 rounded-md"
+                  value={formData[input.name] || formData.name}
+                  onChange={e => setFormData({...formData, [input.name]: e.target.value})}
+                />
+              </div>
+            ))}
+            <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">Sign Up</button>
+          </form>
 
-          <Input fields={field} handleSubmit={handleSubmit} isLoading={false} value={formData} onChange={(name, value) => {
-              setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-              }));
-            }} submitText="Connexion" >
-          </Input>
         </div>
       </div>
     </div>

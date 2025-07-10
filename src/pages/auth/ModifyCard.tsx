@@ -1,73 +1,7 @@
 import { NavLink, useParams } from "react-router-dom";
 import donnee from '../../services/api/api.json';
-import Input, { FormData as InputFormData } from "../../components/Input";
 import { BiArrowToLeft } from "react-icons/bi";
 import { useState } from "react";
-
-const field = [
-  {
-    label: "Title",
-    type: "text",
-    name: "title",
-    placeholder: "Enter the title",
-  },
-  {
-    label: "Description",
-    type: "textarea",
-    name: "description",
-    placeholder: "Enter the description",
-  },
-  {
-    label: "Image",
-    type: "file",
-    name: "image",
-    placeholder: "Upload an image",
-  },
-  {
-    label: "Category",
-    type: "select",
-    name: "category",
-    placeholder: "Select a category",
-    options: [
-      { label: "Sante", value: "sante" },
-      { label: "Education", value: "education" },
-      { label: "Finance", value: "finance" },
-      { label: "Sport", value: "sport" },
-      { label: "Culture", value: "culture" },
-      { label: "Politique", value: "politique" },
-    ]
-  },
-  {
-    label: "Tags",
-    type: "checkbox",
-    name: "tags",
-    placeholder: "Select tags",
-    options: [
-      { label: "Sante", value: "sante" },
-      { label: "Education", value: "education" },
-      { label: "Finance", value: "finance" },
-      { label: "Sport", value: "sport" },
-      { label: "Culture", value: "culture" },
-      { label: "Politique", value: "politique" },
-    ]
-  }
-];
-
-
-
-// interface CardData {
-//   id?: number;
-//   title: string;
-//   description: string;
-//   image: string | null;
-//   image_preview?: string;
-//   category: string;
-//   tags: string[];
-//   author: string;
-//   date: string;
-//   comments?: any[];
-// }
-
 
 
 const ModifyCard = () => {
@@ -84,6 +18,15 @@ const ModifyCard = () => {
     tags: data?.tags || [],
     author: data?.author || "",
     date: data?.date || ""
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const handleFieldChange = (name: string, value: string | boolean | File | null | undefined | string[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -106,20 +49,7 @@ const ModifyCard = () => {
     donnee.push(updatedData);
     console.log(updatedData);
     // Ici vous pouvez ajouter votre logique pour sauvegarder les modifications
-  };
-
-  const [formData, setFormData] = useState(initialFormData);
-
-  function handleFieldChange(name: string, value: InputFormData): void {
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value,
-      // Special handling for image files
-      ...(name === 'image' && value instanceof File 
-        ? { image_preview: URL.createObjectURL(value) }
-        : {})
-    }));
-  }
+  }; 
 
   return (
     <div className="container relative mx-auto my-6 p-1 flex flex-col overflow-y-scroll scrollbar [&::-webkit-scrollbar]:hidden items-start justify-around w-1/2 h-[800px] blackBlue">
@@ -133,15 +63,92 @@ const ModifyCard = () => {
           </NavLink>
       </button>
       <div className="flex flex-col items-center w-full">
-         <Input 
-          fields={field} 
-          handleSubmit={handleSubmit} 
-          isLoading={false} 
-          submitText={data ? "Modifier" : "Ajouter"}
-          loadingText="Modification en cours..."
-          value={initialFormData}
-          onChange={handleFieldChange}
-        />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+          <label htmlFor="title" className="text-lg">
+            Titre
+          </label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            value={formData.title}
+            onChange={(e) => handleFieldChange('title', e.target.value)}
+            className="p-2 border-2 rounded-lg"
+          />
+          <label htmlFor="description" className="text-lg">
+            Description
+          </label>
+          <textarea
+            name="description"
+            id="description"
+            value={formData.description}
+            onChange={(e) => handleFieldChange('description', e.target.value)}
+            className="p-2 border-2 rounded-lg"
+          />
+          <label htmlFor="image" className="text-lg">
+            Image
+          </label>
+          <input
+            type="file"
+            name="image"
+            id="image"
+            onChange={(e) => handleFieldChange('image', e.target.files?.[0])}
+            className="p-2 border-2 rounded-lg"
+          />
+          {formData.image_preview && (
+            <img
+              src={formData.image_preview}
+              alt="Preview de l'image"
+              className="w-full h-auto my-2"
+            />
+          )}
+          <label htmlFor="category" className="text-lg">
+            Catégorie
+          </label>
+          <select
+            name="category"
+            id="category"
+            value={formData.category}
+            onChange={(e) => handleFieldChange('category', e.target.value)}
+            className="p-2 border-2 rounded-lg"
+          >
+            <option value="">Sélectionnez une catégorie</option>
+            <option value="Santé">Santé</option>
+            <option value="Éducation">Éducation</option>
+            <option value="Finance">Finance</option>
+            <option value="Sport">Sport</option>
+            <option value="Culture">Culture</option>
+            <option value="Technologie">Technologie</option>
+            <option value="Voyage">Voyage</option>
+            <option value="Politique">Politique</option>
+          </select>
+          <label htmlFor="tags" className="text-lg">
+            Tags
+          </label>
+          <input
+            type="text"
+            name="tags"
+            id="tags"
+            value={formData.tags.join(', ')}
+            onChange={(e) => handleFieldChange('tags', e.target.value.split(', '))}
+            className="p-2 border-2 rounded-lg"
+          />
+          <label htmlFor="author" className="text-lg">
+            Auteur
+          </label>
+          <input
+            type="text"
+            name="author"
+            id="author"
+            value={formData.author}
+            onChange={(e) => handleFieldChange('author', e.target.value)}
+            className="p-2 border-2 rounded-lg"
+          />
+          <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+            Enregistrer les modifications
+          </button>
+       </form>
+         
       </div>
     </div>
   );

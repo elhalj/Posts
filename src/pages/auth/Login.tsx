@@ -1,6 +1,10 @@
 import { useState } from "react";
-import Input from "../../components/Input";
 
+ type LoginFormData = {
+    email: string;
+    password: string;
+ };
+  
 const Login = ({
   setShowLogin,
   showLogin,
@@ -8,27 +12,9 @@ const Login = ({
   setShowLogin: React.Dispatch<React.SetStateAction<boolean>>;
   showLogin: boolean;
 }) => {
-  const field = [
-    {
-      label: "Email",
-      name: "email",
-      type: "email",
-      placeholder: "Enter your email",
-    },
-    {
-      label: "Password",
-      name: "password",
-      type: "password",
-      placeholder: "Enter your password",
-    },
-  ];
-
-  type LoginFormData = {
-    email: string;
-    password: string;
-  };
-
+ 
   const [formData, setFormData] = useState<LoginFormData>({} as LoginFormData);
+  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // console.log(e.currentTarget.email.value);
@@ -45,21 +31,38 @@ const Login = ({
           close
         </button>
         <div className="flex flex-col justify-center items-center h-full">
-          <Input
-            fields={field}
-            handleSubmit={handleSubmit}
-            isLoading={false}
-            value={formData}
-            onChange={(name, value) => {
-              setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-              }));
-            }}
-            submitText="Login"
-          >
-
-          </Input>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <label htmlFor="email" className="text-lg">
+            Email
+          </label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, email: e.target.value }))
+            }
+            className="p-2 border-2 rounded-lg"
+          />
+          <label htmlFor="password" className="text-lg">
+            Mot de passe
+          </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, password: e.target.value }))
+            }
+            className="p-2 border-2 rounded-lg"
+          />
+          <button type="submit" className="bg-blue-500 text-white p-2 rounded-lg">
+            Connexion
+          </button>
+        </form>
+        
         </div>
       </div>
     </div>
