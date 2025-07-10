@@ -1,7 +1,13 @@
 // Fichier pour enregistrer le service worker
 
 export function registerServiceWorker() {
-  if ('serviceWorker' in navigator && !window.location.hostname.includes('stackblitz')) {
+  // Check for StackBlitz environment first and exit early
+  if (window.location.hostname.includes('stackblitz')) {
+    console.log('Service Worker non supporté dans cet environnement (StackBlitz)');
+    return;
+  }
+
+  if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/service-worker.js')
         .then(registration => {
@@ -11,7 +17,5 @@ export function registerServiceWorker() {
           console.error('Erreur lors de l\'enregistrement du Service Worker:', error);
         });
     });
-  } else if (window.location.hostname.includes('stackblitz')) {
-    console.log('Service Worker non supporté dans cet environnement (StackBlitz)');
   }
 }
