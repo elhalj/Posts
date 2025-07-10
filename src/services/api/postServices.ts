@@ -4,7 +4,7 @@ import api from "./api";
 export type CreatePostDTO = Omit<PostProps, 'id' | 'createdAt' | 'comments'>;
 
 const postService = {
-    createPost: async (formData: FormData) => {
+    createPost: async (formData: CreatePostDTO) => {
         const response = await api.post("/article/ajouterArticle", formData);
         return response.data;
     },

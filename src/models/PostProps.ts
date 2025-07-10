@@ -3,7 +3,7 @@ export type PostProps = {
   title: string;
   description: string;
   content: string;
-  image: string | File | null;
+  image: File | null | undefined;
   author: string;
   createdAt?: string | number | undefined;
   category: string;

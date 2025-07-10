@@ -3,34 +3,22 @@ import usePostStore from "../store/postStore";
 import postService from "../services/api/postServices";
 import axios from "axios";
 import type { PostProps } from "../models/PostProps";
-import type { CreatePostDTO } from "../services/api/postServices";
+// import type { CreatePostDTO } from "../services/api/postServices";
 
 export const usePost = () => {
   const queryClient = useQueryClient();
-  const { setPosts, addPost, setError } = usePostStore();
+  const { setPosts, setError } = usePostStore();
+
+  const mutationKey = ["posts"];
 
   const handleCreatePosts = useMutation({
-    mutationFn: async (newPost: CreatePostDTO) => {
-      const formData = new FormData();
-      Object.entries(newPost).forEach(([key, value]) => {
-        if (key === "tags" && Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value));
-        } else if (value instanceof File) {
-          formData.append(key, value);
-        } else if (value !== null && value !== undefined) {
-          formData.append(key, value.toString());
-        }
-      });
-      const response = await postService.createPost(formData);
-      return response.data;
+    mutationKey,
+    mutationFn: async (newPost: FormData) => {
+      await postService.createPost(newPost)
     },
-    onSuccess: (data: PostProps) => {
-      return response;
-    },
-    onSuccess: (data) => {
-      addPost(data);
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: mutationKey})
+    } 
   });
 
   const handleGetPosts = useQuery<PostProps[], Error>({
