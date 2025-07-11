@@ -1,13 +1,11 @@
 import { useState } from "react";
-// import donnee from "../../services/api/api.json"
 import { usePost } from "../../hooks/usePost";
 import { PostProps } from "../../models/PostProps";
-
-
 
 interface ImageError {
   image?: string;
 }
+
 const AddCard = () => {
   const { handleCreatePosts } = usePost();
   const [formData, setFormData] = useState<Omit<PostProps, 'id' | 'createdAt' | 'updatedAt' | 'comments'>>({
@@ -22,26 +20,25 @@ const AddCard = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [errors, setErrors] = useState<ImageError>({})
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [errors, setErrors] = useState<ImageError>({});
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  
-  
-    // Now use postData instead of formData
-    const resetForm = () => {
-      setFormData({
-        title: '',
-        description: '',
-        content: '',
-        author: '',
-        image: null,
-        category: '',
-        tags: [],
-      });
-      // setImagePreviews({});
-    };
- 
-   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      description: '',
+      content: '',
+      author: '',
+      image: null,
+      category: '',
+      tags: [],
+    });
+    setImagePreview(null);
+    setError(null);
+    setErrors({});
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
@@ -65,56 +62,81 @@ const AddCard = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  const validateForm = () => {
+    if (!formData.title.trim()) {
+      setError('Title is required');
+      return false;
+    }
+    if (!formData.description.trim()) {
+      setError('Description is required');
+      return false;
+    }
+    if (!formData.content.trim()) {
+      setError('Content is required');
+      return false;
+    }
+    if (!formData.image) {
+      setError('Image is required');
+      return false;
+    }
+    if (!formData.category) {
+      setError('Category is required');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsLoading(true);
     setError(null);
-    
-      try {
-    // Add validation before submission
-        if (!formData.title.trim()) {
-      setError('Title is required')
-    } else if (!formData.description.trim()) {
-      setError('Description is required');
-    } else if (!formData.content.trim()) {
-      setError('Content is required');
-    } else if (!formData.image) {
-      setError('Image is required');
-    } else if (!formData.category) {
-      setError('Category is required');
-    }
 
-    // Create FormData and append all fields
-    const postData = new FormData();
-    postData.append('title', formData.title);
-    postData.append('description', formData.description);
-    postData.append('content', formData.content);
-    if (formData.image) {
-      postData.append('image', formData.image);
-    }
-    postData.append('author', formData.author);
-    postData.append('category', formData.category);
-    formData.tags.forEach(tag => postData.append('tags', tag));
+    try {
+      // Create FormData and append all fields
+      const postData = new FormData();
+      postData.append('title', formData.title);
+      postData.append('description', formData.description);
+      postData.append('content', formData.content);
+      postData.append('author', formData.author);
+      postData.append('category', formData.category);
+      
+      if (formData.image) {
+        postData.append('image', formData.image);
+      }
+      
+      // Append tags as JSON string or individually
+      formData.tags.forEach(tag => postData.append('tags', tag));
 
-    // const myFormData = new FormData();
-    await handleCreatePosts.mutateAsync(postData);
-    alert('Card added successfully!');
-    resetForm();
-  } catch (err) {
-    console.error('Error adding card:', err);
-    setError((err as Error).message);
-  } finally {
-    setIsLoading(false);
-  }
+      await handleCreatePosts.mutateAsync(postData);
+      alert('Card added successfully!');
+      resetForm();
+    } catch (err) {
+      console.error('Error adding card:', err);
+      setError((err as Error).message || 'Une erreur est survenue lors de l\'ajout de l\'article');
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
+
   const categories = ['Web Development', 'Mobile App', 'Artificial Intelligence', 'Data Science', 'Cybersecurity', 'Networking', 'Database', 'Cloud Computing', 'DevOps', 'UX Design', 'Other'] as const;
   const tags = ['JavaScript', 'React', 'Angular', 'Vue', 'NodeJs', 'Express', 'MongoDB', 'Mysql', 'PostgreSQL', 'Python', 'Django', 'Flask', 'Java', 'Spring', 'C++', 'C#', '.NET', 'PHP', 'Ruby', 'Go', 'Rust', 'Swift', 'Kotlin', 'TypeScript'] as const;
-  
 
   return (
     <div className="container mx-auto p-4 md:p-8 bg-warmBeige rounded-lg shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Message d'erreur général */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            {error}
+          </div>
+        )}
+
         <label className="block">
           <span className="block text-lg font-medium text-shadow-white">Title:</span>
           <input
@@ -125,8 +147,8 @@ const AddCard = () => {
             }
             className="mt-1 block w-3/4 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
           />
-          {error === 'Title is required' && <p className="mt-1 text-sm text-red-600">Le title est requis</p>}
         </label>
+
         <label className="block">
           <span className="block text-lg font-medium text-shadow-white">Description:</span>
           <textarea
@@ -136,8 +158,8 @@ const AddCard = () => {
             }
             className="mt-1 block w-3/4 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
           />
-          {error === 'Description is required' && <p className="mt-1 text-sm text-red-600">La description est requise</p>}
         </label>
+
         <label className="block">
           <span className="block text-lg font-medium text-shadow-white">Content:</span>
           <textarea
@@ -148,8 +170,8 @@ const AddCard = () => {
             }
             className="mt-1 block w-3/4 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
           />
-          {error === 'Content is required' && <p className="mt-1 text-sm text-red-600">Le contenu est requis</p>}
         </label>
+
         <label className="block">
           <span className="block text-lg font-medium text-shadow-white">Author:</span>
           <input
@@ -161,6 +183,7 @@ const AddCard = () => {
             className="mt-1 block w-3/4 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
           />
         </label>
+
         <label className="block">
           <span className="block text-lg font-medium text-shadow-white">Image:</span>
           <input
@@ -169,7 +192,7 @@ const AddCard = () => {
             onChange={handleImageChange}
             className="mt-1 block w-3/4 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
           />
-          { imagePreview && (
+          {imagePreview && (
             <div className="mt-4">
               <img
                 src={imagePreview}
@@ -181,9 +204,8 @@ const AddCard = () => {
           {errors.image && (
             <p className="text-red-500 text-sm text-center">{errors.image}</p>
           )}
-
-          {error === 'Image is required' && <p className="mt-1 text-sm text-red-600">L'image est requise</p>}
         </label>
+
         <label className="block">
           <span className="block text-lg font-medium text-shadow-white">Category:</span>
           <select
@@ -200,8 +222,8 @@ const AddCard = () => {
               </option>
             ))}
           </select>
-          {error === 'Category is required' && <p className="mt-1 text-sm text-red-600">La cat gorie est requise</p>}
         </label>
+
         <label className="block">
           <span className="block text-lg font-medium text-shadow-white">Tags:</span>
           {tags.map((tag, index) => (
@@ -222,19 +244,26 @@ const AddCard = () => {
               />
               <div className="flex gap-20">
                 <span className="text-lg">{tag}</span>
-              <span className="ml-2 text-sm">
-                  {formData.tags.includes(tag) ? (<p className="bg-indigo-400 p-2 m-2 rounded-lg">#{ tag}</p>) : ''}
-              </span>
-                </div>
+                <span className="ml-2 text-sm">
+                  {formData.tags.includes(tag) ? (
+                    <p className="bg-indigo-400 p-2 m-2 rounded-lg">#{tag}</p>
+                  ) : ''}
+                </span>
+              </div>
             </div>
           ))}
         </label>
-        <button type="submit" className="bg-blue-500 p-2 rounded-md text-black hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+
+        <button 
+          type="submit" 
+          disabled={isLoading}
+          className="bg-blue-500 p-2 rounded-md text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {isLoading ? "En cours..." : "Add Card"}
         </button>
-      </form>     
+      </form>
     </div>
-  )
-}
+  );
+};
 
-export default AddCard
+export default AddCard;
